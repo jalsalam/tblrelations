@@ -1,8 +1,6 @@
-
-
 #' Check a tbl for a candidate primary key
 #'
-#' @param x a data frame
+#' @param .data a data frame
 #' @param by a character vector specifying a candidate primary to (e.g., to check)
 #' @return boolean whether `x` has primary key `by`
 #' A primary key of a table is a column (or set of columns) which is distinct.

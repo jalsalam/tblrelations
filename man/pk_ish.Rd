@@ -8,9 +8,9 @@ pk_ish(.data, by = NULL,
   na_matches = pkgconfig::get_config("dplyr::na_matches"))
 }
 \arguments{
-\item{by}{a character vector specifying a candidate primary to (e.g., to check)}
+\item{.data}{a data frame}
 
-\item{x}{a data frame}
+\item{by}{a character vector specifying a candidate primary to (e.g., to check)}
 }
 \value{
 boolean whether \code{x} has primary key \code{by}
