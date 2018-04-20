@@ -4,11 +4,14 @@ The goal of tblrelations is to fill in functions for working with tibbles in a R
 
 ## Installation
 
-You can (not yet) install the development version of tblrelations from Github with:
+You can install the development version of tblrelations from Github with:
 
 ``` r
 devtools::install_github("jalsalam/tblrelations")
 ```
+
+(but I don't really recommend it yet!)
+
 
 ## Example
 
