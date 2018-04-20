@@ -23,7 +23,7 @@ left_join_fk <- function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), 
   by_y <- suppressMessages(dplyr::common_by(by, x, y)) %>% {.$y}
 
   if(fk_ish(x, y, by_y)) {
-    left_join(x=x, y=y, by=by, copy=copy, suffix=suffix, na_matches=na_matches, ...)
+    dplyr::left_join(x=x, y=y, by=by, copy=copy, suffix=suffix, na_matches=na_matches, ...)
   } else {
     stop("`by` variables must be `fk_ish` in `x`->`y`")
   }

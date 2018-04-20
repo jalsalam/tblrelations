@@ -18,7 +18,7 @@ fk_ish(x, y, by = NA_character_,
 boolean whether \code{by} variables could specify a foreign key relationship \code{x}->\code{y}
 
 Satisfying a foreign key constraint relationship would ensure that
-\code{z <- left_join(x, y, by = by)} would result in all rows of \code{x} appear in \code{z}.
+\code{z <- dplyr::left_join(x, y, by = by)} would result in all rows of \code{x} appear in \code{z}.
 A foreign key constraint requires two things:
 \enumerate{
 \item that all the key values in x be present in y

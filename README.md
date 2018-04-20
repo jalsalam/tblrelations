@@ -10,12 +10,10 @@ You can install the development version of tblrelations from Github with:
 devtools::install_github("jalsalam/tblrelations")
 ```
 
-(but I don't really recommend it yet!)
-
 
 ## Example
 
-Have you ever been surprised that a left_join resulted in an unexpected cross-join or dropped rows?
+Have you ever been surprised that a left_join resulted in an unexpected cross-join or NA rows?
 
 ``` r
 pk_ish(dfy, by = "id")
@@ -25,26 +23,27 @@ pk_ish(dfy, by = "id")
 fk_ish(dfx, dfy, by = "id")
 # TRUE if all combination of "id" in dfx are in dfy and dfy$id is unique.
 
+left_join_fk(dfx, dfy, by = "id")
+# if there is a foreign-key-ish relationship of dfx -> dfy using "id", then it returns the joined table as normal, otherwise it errors.
+
 ```
 
 ## Development goals
 
-1. Use the same semantics for the `by` argument as are used in the `dplyr::join` verbs. Maybe this means using `tidyselect`? This should mean that you can do any of:
+1. Make sure that the same semantics of the `by` argument can be used with `left_join_fk()` as can be used with the normal dplyr join verbs. I know that the select/rename verbs use `tidyselect` package, but I don't think that there is a similar backend for join verb `by` specification.
 
-``` r
-pk_ish(dfy, by = "id")
-pk_ish(dfy, by = c("name", "dob"))
+2. Add diagnostics and good error messages that let you know if there are missing or duplicate values on your dimension table.
 
-fk_ish(dfx, dfy, by = c("idx" = "idy"))
-```
+3. Add right_join_fk. Are there other join relationships that make sense for these kinds of checks?
 
-2. Maybe wrap `left_join` with `left_join_fk()` which checks `fk_ish` and if so does the normal `left_join`?
 
-3. Maybe s3 object for which you can more permanently label pk?
+## Much more speculative. Really need some DB research on what else might be helpful:
 
-4. Maybe express domains, codomains, onto, covers, or other such function/set theory types of concepts as tests on relations.
+- Maybe s3 object for which you can more permanently label pk?
 
-5. Maybe coerce a table to a function. E.g. :
+- Maybe express domains, codomains, onto, covers, or other such function/set theory types of concepts as tests on relations.
+
+- Maybe coerce a table to a function. E.g. :
 
 ```r
 join_dfy <- as_tbl_function(dfy, by = "id")
@@ -52,4 +51,4 @@ join_dfy <- as_tbl_function(dfy, by = "id")
 dfx %>% join_dfy(by = "id")
 ```
 
-But there are plenty of questions about how that should work.
+But there are plenty of questions about what else would be worthwhile.

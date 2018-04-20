@@ -27,7 +27,7 @@ pk_ish <- function(.data, by = NULL,
 #' @return boolean whether `by` variables could specify a foreign key relationship `x`->`y`
 #'
 #' Satisfying a foreign key constraint relationship would ensure that
-#' `z <- left_join(x, y, by = by)` would result in all rows of `x` appear in `z`.
+#' `z <- dplyr::left_join(x, y, by = by)` would result in all rows of `x` appear in `z`.
 #' A foreign key constraint requires two things:
 #'   1) that all the key values in x be present in y
 #'   2) that key be pk_ish in y (e.g., distinct combinations)
