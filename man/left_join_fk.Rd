@@ -4,8 +4,8 @@
 \alias{left_join_fk}
 \title{Left-join while checking that \code{.y} has primary key \code{by}}
 \usage{
-left_join_fk(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...,
-  na_matches = pkgconfig::get_config("dplyr::na_matches"))
+left_join_fk(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
+  ..., na_matches = pkgconfig::get_config("dplyr::na_matches"))
 }
 \arguments{
 \item{x}{a data frame}
