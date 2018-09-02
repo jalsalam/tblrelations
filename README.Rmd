@@ -30,6 +30,7 @@ When working with data frames in R in a relational data way, it is useful to ide
 
 ```{r flights}
 library(tblrelations)
+library(dplyr)
 library(nycflights13)
 
 airports
@@ -47,9 +48,37 @@ flights
 pk_ish(flights, by = c("year", "month", "day", "flight"))
 pk_ish(flights, by = c("year", "month", "day", "tailnum"))
 pk_ish(flights, by = c("year", "month", "day", "hour", "flight"))
+pk_ish(flights, by = c("year", "month", "day", "hour", "carrier", "flight"))
+pk_ish(flights, by = c("year", "month", "day", "carrier", "flight"))
+pk_ish(flights, by = c("year", "month", "day", "origin", "carrier", "flight"))
+
+# pk_ish(flights, .keys = vars(year, month, day, carrier, flight)) # currently errors
 ```
 
-(this is supposed to be FALSE, FALSE, TRUE. See: [r4ds relational data](http://r4ds.had.co.nz/relational-data.html))
+See: [r4ds relational data](http://r4ds.had.co.nz/relational-data.html))
+
+
+```{r band_members}
+
+pk_ish(dplyr::band_members, by = "name")
+# pk_ish(dplyr::band_members, by = vars(name)) # currently errors
+
+fk_ish(band_members, band_instruments, by = "name")
+# fk_ish(band_members, band_instruments2, by = c("name" = "artist")) # currently errors
+```
+
+Note: it should be possible to use rename_at like options:
+
+```{r}
+#rename_at(band_instruments2, vars(name = "artist")) #error b/c you must rename with a function
+rename_at(band_instruments2, vars("name" = "artist", "instrument" = "plays"), funs(names))
+rename_at(band_instruments2, vars(name = "artist", instrument = "plays"), funs(names))
+rename_at(band_instruments2, c("name" = "artist", "instrument" = "plays"), funs(names))
+```
+
+
+
+
 
 Have you ever been surprised that a left_join resulted in an unexpected cross-join or NA rows?
 
@@ -68,11 +97,13 @@ left_join_fk(dfx, dfy, by = "id")
 
 ## Development goals
 
-1. Make sure that the same semantics of the `by` argument can be used with `left_join_fk()` as can be used with the normal dplyr join verbs. I know that the select/rename verbs use `tidyselect` package, but I don't think that there is a similar backend for join verb `by` specification.
+1. Make sure that the same semantics of the `by` argument can be used with `left_join_fk()` as can be used with the normal dplyr join verbs. Using rename_at like semantics, it should eb possible to accept either a character vector or a `vars` specification.
 
-2. Add diagnostics and good error messages that let you know if there are missing or duplicate values on your dimension table.
+2. Add diagnostics and good error messages that let you know if there are missing or duplicate values on your dimension table. Maybe this should be under an option `verbose = TRUE` or something.
 
-3. Add right_join_fk. Are there other join relationships that make sense for these kinds of checks?
+3. Add an assertion version of some o fthese checks -- e.g., a good explanatory error message for use with testthat.
+
+4. Add right_join_fk. Are there other join relationships that make sense for these kinds of checks?
 
 
 ## Much more speculative. Really need some DB research on what else might be helpful:

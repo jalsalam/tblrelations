@@ -21,6 +21,15 @@ When working with data frames in R in a relational data way, it is useful to ide
 
 ``` r
 library(tblrelations)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 library(nycflights13)
 
 airports
@@ -73,9 +82,55 @@ pk_ish(flights, by = c("year", "month", "day", "tailnum"))
 #> [1] FALSE
 pk_ish(flights, by = c("year", "month", "day", "hour", "flight"))
 #> [1] FALSE
+pk_ish(flights, by = c("year", "month", "day", "hour", "carrier", "flight"))
+#> [1] TRUE
+pk_ish(flights, by = c("year", "month", "day", "carrier", "flight"))
+#> [1] FALSE
+pk_ish(flights, by = c("year", "month", "day", "origin", "carrier", "flight"))
+#> [1] TRUE
+
+# pk_ish(flights, .keys = vars(year, month, day, carrier, flight)) # currently errors
 ```
 
-(this is supposed to be FALSE, FALSE, TRUE. See: [r4ds relational data](http://r4ds.had.co.nz/relational-data.html))
+See: [r4ds relational data](http://r4ds.had.co.nz/relational-data.html))
+
+``` r
+
+pk_ish(dplyr::band_members, by = "name")
+#> [1] TRUE
+# pk_ish(dplyr::band_members, by = vars(name)) # currently errors
+
+fk_ish(band_members, band_instruments, by = "name")
+#> [1] FALSE
+# fk_ish(band_members, band_instruments2, by = c("name" = "artist")) # currently errors
+```
+
+Note: it should be possible to use rename\_at like options:
+
+``` r
+#rename_at(band_instruments2, vars(name = "artist")) #error b/c you must rename with a function
+rename_at(band_instruments2, vars("name" = "artist", "instrument" = "plays"), funs(names))
+#> # A tibble: 3 x 2
+#>   name  instrument
+#>   <chr> <chr>     
+#> 1 John  guitar    
+#> 2 Paul  bass      
+#> 3 Keith guitar
+rename_at(band_instruments2, vars(name = "artist", instrument = "plays"), funs(names))
+#> # A tibble: 3 x 2
+#>   name  instrument
+#>   <chr> <chr>     
+#> 1 John  guitar    
+#> 2 Paul  bass      
+#> 3 Keith guitar
+rename_at(band_instruments2, c("name" = "artist", "instrument" = "plays"), funs(names))
+#> # A tibble: 3 x 2
+#>   name  instrument
+#>   <chr> <chr>     
+#> 1 John  guitar    
+#> 2 Paul  bass      
+#> 3 Keith guitar
+```
 
 Have you ever been surprised that a left\_join resulted in an unexpected cross-join or NA rows?
 
@@ -94,11 +149,13 @@ left_join_fk(dfx, dfy, by = "id")
 Development goals
 -----------------
 
-1.  Make sure that the same semantics of the `by` argument can be used with `left_join_fk()` as can be used with the normal dplyr join verbs. I know that the select/rename verbs use `tidyselect` package, but I don't think that there is a similar backend for join verb `by` specification.
+1.  Make sure that the same semantics of the `by` argument can be used with `left_join_fk()` as can be used with the normal dplyr join verbs. Using rename\_at like semantics, it should eb possible to accept either a character vector or a `vars` specification.
 
-2.  Add diagnostics and good error messages that let you know if there are missing or duplicate values on your dimension table.
+2.  Add diagnostics and good error messages that let you know if there are missing or duplicate values on your dimension table. Maybe this should be under an option `verbose = TRUE` or something.
 
-3.  Add right\_join\_fk. Are there other join relationships that make sense for these kinds of checks?
+3.  Add an assertion version of some o fthese checks -- e.g., a good explanatory error message for use with testthat.
+
+4.  Add right\_join\_fk. Are there other join relationships that make sense for these kinds of checks?
 
 Much more speculative. Really need some DB research on what else might be helpful:
 ----------------------------------------------------------------------------------
