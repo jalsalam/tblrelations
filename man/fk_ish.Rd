@@ -39,4 +39,8 @@ fk_ish(x, y, "id")
 x <- dplyr::band_members
 y <- dplyr::band_instruments2
 by <- c("name" = "artist")
+library(nycflights13)
+x <- flights
+y <- airports
+by <- c("dest" = "faa")
 }

@@ -1,7 +1,7 @@
 Package: tblrelations
 Type: Package
 Title: Extra diagnostics for joins
-Version: 0.1.0
+Version: 0.1.0.9000
 Author: Jameel Alsalam
 Maintainer: Jameel Alsalam <jalsalam@gmail.com>
 Description: More about what it does (maybe more than one line)
@@ -17,4 +17,5 @@ Imports:
     tibble,
     purrr
 Suggests: 
-    testthat
+    testthat,
+    nycflights13
