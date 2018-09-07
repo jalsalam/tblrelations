@@ -15,6 +15,7 @@ pk_ish(.data, by = NULL,
 \value{
 boolean whether \code{x} has primary key \code{by}
 A primary key of a table is a column (or set of columns) which is distinct.
+Should error if the specified \code{by} is not present in .data
 }
 \description{
 Check a tbl for a candidate primary key

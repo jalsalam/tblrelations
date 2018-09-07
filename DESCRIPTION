@@ -14,6 +14,7 @@ RoxygenNote: 6.1.0
 Imports: 
     dplyr,
     magrittr,
-    tibble
+    tibble,
+    purrr
 Suggests: 
     testthat

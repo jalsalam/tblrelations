@@ -23,8 +23,9 @@ A foreign key constraint requires two things:
 \enumerate{
 \item that all the key values in x be present in y
 \item that key be pk_ish in y (e.g., distinct combinations)
-Note: currently using \code{by} parameter as a character vector, but join verbs have
-more flexible specification. When this is addressed, probably the default arg will be NULL.
+Note: errors if the specified \code{by} is not present
+Note 2: goal is to have a more flexible variable specification that can use \code{vars()} type spec (at least for same-named-key..)
+Maybe the default arg should be NULL, not NA_character_ ?
 }
 }
 \description{
@@ -35,4 +36,7 @@ x <- tibble(id = c(1, 2, 3))
 y <- tibble(id = c(1, 2, 3), val = c(100, 200, 300))
 by <- "id"
 fk_ish(x, y, "id")
+x <- dplyr::band_members
+y <- dplyr::band_instruments2
+by <- c("name" = "artist")
 }

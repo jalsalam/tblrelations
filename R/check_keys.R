@@ -4,6 +4,7 @@
 #' @param by a character vector specifying a candidate primary to (e.g., to check)
 #' @return boolean whether `x` has primary key `by`
 #' A primary key of a table is a column (or set of columns) which is distinct.
+#' Should error if the specified `by` is not present in .data
 #'@examples
 #'dfx <- tibble::tibble(id = c(1, 2, 3), val = c(1, 1, 2))
 #'pk_ish(dfx, "id")
@@ -51,22 +52,33 @@ assert_pk_ish <- function(.data, by = NULL,
 #' A foreign key constraint requires two things:
 #'   1) that all the key values in x be present in y
 #'   2) that key be pk_ish in y (e.g., distinct combinations)
-#' Note: currently using `by` parameter as a character vector, but join verbs have
-#' more flexible specification. When this is addressed, probably the default arg will be NULL.
+#' Note: errors if the specified `by` is not present
+#' Note 2: goal is to have a more flexible variable specification that can use `vars()` type spec (at least for same-named-key..)
+#' Maybe the default arg should be NULL, not NA_character_ ?
 #'
 #' @examples
 #' x <- tibble(id = c(1, 2, 3))
 #' y <- tibble(id = c(1, 2, 3), val = c(100, 200, 300))
 #' by <- "id"
 #' fk_ish(x, y, "id")
+#' x <- dplyr::band_members
+#' y <- dplyr::band_instruments2
+#' by <- c("name" = "artist")
+#' library(nycflights13)
+#' x <- flights
+#' y <- airports
+#' by <- c("dest" = "faa")
 #' @export
 fk_ish <- function(x, y, by = NA_character_,
                    na_matches = pkgconfig::get_config("dplyr::na_matches")) {
 
-  x_combos <- dplyr::select(x, by)
-  y_combos <- dplyr::select(y, by)
+  by <- dplyr::common_by(by, x, y)
 
-  res <- if (isTRUE(all.equal(nrow(dplyr::setdiff(x_combos, y_combos)), 0)) & (pk_ish(y, by = by))) {TRUE} else {FALSE}
+  x_combos <- dplyr::select(x, by$x)
+  y_combos <- dplyr::select(y, by$y)
+  y_combos_x <- y_combos %>% purrr::set_names(by$x) #version of y with names from x
+
+  res <- if (isTRUE(all.equal(nrow(dplyr::setdiff(x_combos, y_combos_x)), 0)) & (pk_ish(y, by = by$y))) {TRUE} else {FALSE}
   res
 }
 
@@ -74,14 +86,17 @@ fk_ish <- function(x, y, by = NA_character_,
 assert_fk_ish <- function(x, y, by = NA_character_,
                           na_matches = pkgconfig::get_config("dplyr::na_matches")) {
 
-  x_combos <- dplyr::select(x, by)
-  y_combos <- dplyr::select(y, by)
+  by <- dplyr::common_by(by, x, y)
 
-  if (! isTRUE(all.equal(nrow(dplyr::setdiff(x_combos, y_combos)), 0))) {
+  x_combos <- dplyr::select(x, by$x)
+  y_combos <- dplyr::select(y, by$y)
+  y_combos_x <- y_combos %>% purrr::set_names(by$x) #version of y with names from x
+
+  if (! isTRUE(all.equal(nrow(dplyr::setdiff(x_combos, y_combos_x)), 0))) {
     stop(glue::glue("Values of {by} in `x` are not in `y`"), call. = FALSE)
   }
 
-  assert_pk_ish(y, by = by)
+  assert_pk_ish(y, by = by$y)
 
   invisible(x)
 }

@@ -39,7 +39,7 @@ test_that("fk_ish handles basic true case", {
 })
 
 test_that("fk_ish handles basic false case - no match", {
-  expect_false(fk_ish(flights, airports, "faa"))
+  expect_error(fk_ish(flights, airports, "faa"))
   expect_error(assert_fk_ish(flights, airports, "faa"))
 })
 
@@ -47,6 +47,7 @@ test_that('fk_ish handles `by = c("x.by" = "y.by"', {
   expect_true(         fk_ish(flights, airports, by = c("origin" = "faa")))
   expect_silent(assert_fk_ish(flights, airports, by = c("origin" = "faa")))
 
-  expect_true(         fk_ish(flights, airports, c("dest" = "faa")))
-  expect_silent(assert_fk_ish(flights, airports, c("dest" = "faa")))
+  # actually not all dest are in airports!
+  # expect_true(         fk_ish(flights, airports, c("dest" = "faa")))
+  # expect_silent(assert_fk_ish(flights, airports, c("dest" = "faa")))
 })
