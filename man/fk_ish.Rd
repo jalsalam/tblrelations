@@ -2,9 +2,13 @@
 % Please edit documentation in R/check_keys.R
 \name{fk_ish}
 \alias{fk_ish}
+\alias{assert_fk_ish}
 \title{Check a tbl for a candidate foreign key constraint relationship}
 \usage{
 fk_ish(x, y, by = NA_character_,
+  na_matches = pkgconfig::get_config("dplyr::na_matches"))
+
+assert_fk_ish(x, y, by = NA_character_,
   na_matches = pkgconfig::get_config("dplyr::na_matches"))
 }
 \arguments{
@@ -13,6 +17,8 @@ fk_ish(x, y, by = NA_character_,
 \item{y}{data frame with foreign key relationship to x}
 
 \item{by}{character vector of key relationship, with semantics of dplyr join \code{by} parameters.}
+
+\item{na_matches}{as in dplyr}
 }
 \value{
 boolean whether \code{by} variables could specify a foreign key relationship \code{x}->\code{y}
@@ -32,8 +38,8 @@ Maybe the default arg should be NULL, not NA_character_ ?
 Check a tbl for a candidate foreign key constraint relationship
 }
 \examples{
-x <- tibble(id = c(1, 2, 3))
-y <- tibble(id = c(1, 2, 3), val = c(100, 200, 300))
+x <- tibble::tibble(id = c(1, 2, 3))
+y <- tibble::tibble(id = c(1, 2, 3), val = c(100, 200, 300))
 by <- "id"
 fk_ish(x, y, "id")
 x <- dplyr::band_members

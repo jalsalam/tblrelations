@@ -15,7 +15,10 @@ Imports:
     dplyr,
     magrittr,
     tibble,
-    purrr
+    purrr,
+    glue,
+    rlang
 Suggests: 
     testthat,
-    nycflights13
+    nycflights13,
+    Lahman

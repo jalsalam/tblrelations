@@ -13,17 +13,25 @@ left_join_fk(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"),
 \item{y}{a data frame}
 
 \item{by}{a character vector specification of variables to join by (with a foreign key relationship)}
+
+\item{copy}{as in dplyr... not sure this is needed}
+
+\item{suffix}{as in dplyr}
+
+\item{...}{as in dplyr, currently ignored}
+
+\item{na_matches}{as in dplyr, currently ignored}
 }
 \description{
 Wraps \code{dplyr::left_join()} with extra checking and diagnostics.
 }
 \examples{
 if (require("Lahman")) {
-batting_df <- tbl_df(Batting)
-person_df <- tbl_df(Master)
-uperson_df <- tbl_df(Master[!duplicated(Master$playerID), ])
+batting_df <- dplyr::tbl_df(Batting)
+person_df <- dplyr::tbl_df(Master)
+uperson_df <- dplyr::tbl_df(Master[!duplicated(Master$playerID), ])
 
-left_join_pk(batting_df, uperson_df)
-left_join_pk(batting_df, person_df)
+left_join_fk(batting_df, uperson_df)
+left_join_fk(batting_df, person_df)
 }
 }

@@ -1,7 +1,12 @@
+
+
+#### Primary Keys -------------
+
 #' Check a tbl for a candidate primary key
 #'
 #' @param .data a data frame
 #' @param by a character vector specifying a candidate primary to (e.g., to check)
+#' @param na_matches as in dplyr ...
 #' @return boolean whether `x` has primary key `by`
 #' A primary key of a table is a column (or set of columns) which is distinct.
 #' Should error if the specified `by` is not present in .data
@@ -23,6 +28,7 @@ pk_ish <- function(.data, by = NULL,
 }
 
 #' @export
+#' @rdname pk_ish
 assert_pk_ish <- function(.data, by = NULL,
                           na_matches = pkgconfig::get_config("dplyr::na_matches")) {
 
@@ -40,11 +46,14 @@ assert_pk_ish <- function(.data, by = NULL,
 
 # assert_pk_ish(mtcars, by = c("mpg", "cyl"))
 
+#### Foreign keys -------------
+
 #' Check a tbl for a candidate foreign key constraint relationship
 #'
 #' @param x data frame
 #' @param y data frame with foreign key relationship to x
 #' @param by character vector of key relationship, with semantics of dplyr join `by` parameters.
+#' @param na_matches as in dplyr
 #' @return boolean whether `by` variables could specify a foreign key relationship `x`->`y`
 #'
 #' Satisfying a foreign key constraint relationship would ensure that
@@ -57,8 +66,8 @@ assert_pk_ish <- function(.data, by = NULL,
 #' Maybe the default arg should be NULL, not NA_character_ ?
 #'
 #' @examples
-#' x <- tibble(id = c(1, 2, 3))
-#' y <- tibble(id = c(1, 2, 3), val = c(100, 200, 300))
+#' x <- tibble::tibble(id = c(1, 2, 3))
+#' y <- tibble::tibble(id = c(1, 2, 3), val = c(100, 200, 300))
 #' by <- "id"
 #' fk_ish(x, y, "id")
 #' x <- dplyr::band_members
@@ -83,6 +92,7 @@ fk_ish <- function(x, y, by = NA_character_,
 }
 
 #' @export
+#' @rdname fk_ish
 assert_fk_ish <- function(x, y, by = NA_character_,
                           na_matches = pkgconfig::get_config("dplyr::na_matches")) {
 

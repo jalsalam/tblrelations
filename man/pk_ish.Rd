@@ -2,15 +2,21 @@
 % Please edit documentation in R/check_keys.R
 \name{pk_ish}
 \alias{pk_ish}
+\alias{assert_pk_ish}
 \title{Check a tbl for a candidate primary key}
 \usage{
 pk_ish(.data, by = NULL,
+  na_matches = pkgconfig::get_config("dplyr::na_matches"))
+
+assert_pk_ish(.data, by = NULL,
   na_matches = pkgconfig::get_config("dplyr::na_matches"))
 }
 \arguments{
 \item{.data}{a data frame}
 
 \item{by}{a character vector specifying a candidate primary to (e.g., to check)}
+
+\item{na_matches}{as in dplyr ...}
 }
 \value{
 boolean whether \code{x} has primary key \code{by}
