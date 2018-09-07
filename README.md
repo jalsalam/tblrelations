@@ -21,15 +21,7 @@ When working with data frames in R in a relational data way, it is useful to ide
 
 ``` r
 library(tblrelations)
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
+suppressPackageStartupMessages(library(dplyr))
 library(nycflights13)
 
 airports
@@ -93,6 +85,12 @@ pk_ish(flights, by = c("year", "month", "day", "origin", "carrier", "flight"))
 ```
 
 See: [r4ds relational data](http://r4ds.had.co.nz/relational-data.html))
+
+``` r
+fk_ish(flights, airlines, by = "carrier")
+#> [1] TRUE
+#fk_ish(flights, airports, by = c("origin" = "faa")) # currently errors
+```
 
 ``` r
 

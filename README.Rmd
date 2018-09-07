@@ -30,7 +30,7 @@ When working with data frames in R in a relational data way, it is useful to ide
 
 ```{r flights}
 library(tblrelations)
-library(dplyr)
+suppressPackageStartupMessages(library(dplyr))
 library(nycflights13)
 
 airports
@@ -56,6 +56,12 @@ pk_ish(flights, by = c("year", "month", "day", "origin", "carrier", "flight"))
 ```
 
 See: [r4ds relational data](http://r4ds.had.co.nz/relational-data.html))
+
+
+```{r}
+fk_ish(flights, airlines, by = "carrier")
+#fk_ish(flights, airports, by = c("origin" = "faa")) # currently errors
+```
 
 
 ```{r band_members}

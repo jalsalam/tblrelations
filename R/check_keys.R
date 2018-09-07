@@ -13,9 +13,31 @@
 pk_ish <- function(.data, by = NULL,
                    na_matches = pkgconfig::get_config("dplyr::na_matches")) {
 
-  nrow(dplyr::distinct(dplyr::select(.data, by))) == nrow(.data)
+  id_all_rows <- nrow(dplyr::distinct(dplyr::select(.data, by))) == nrow(.data)
+
+  #TODO: check subsets
+  #no_subsets_id_all_rows <-
+
+  id_all_rows
 }
 
+#' @export
+assert_pk_ish <- function(.data, by = NULL,
+                          na_matches = pkgconfig::get_config("dplyr::na_matches")) {
+
+  data_name <- rlang::expr_text(rlang::enexpr(.data))
+
+  if (!nrow(dplyr::distinct(dplyr::select(.data, by))) == nrow(.data)) {
+    by_names <- glue::glue_collapse(by, sep = "`, `", last = "` and `")
+    stop(glue::glue("fields `{by_names}` are not `pk_ish` in `{data_name}` because they do not uniquely identify all rows"), call. = FALSE)
+  }
+
+  #TODO: no_subsets_id_all_rows?
+
+  invisible(.data)
+}
+
+# assert_pk_ish(mtcars, by = c("mpg", "cyl"))
 
 #' Check a tbl for a candidate foreign key constraint relationship
 #'
@@ -46,4 +68,20 @@ fk_ish <- function(x, y, by = NA_character_,
 
   res <- if (isTRUE(all.equal(nrow(dplyr::setdiff(x_combos, y_combos)), 0)) & (pk_ish(y, by = by))) {TRUE} else {FALSE}
   res
+}
+
+#' @export
+assert_fk_ish <- function(x, y, by = NA_character_,
+                          na_matches = pkgconfig::get_config("dplyr::na_matches")) {
+
+  x_combos <- dplyr::select(x, by)
+  y_combos <- dplyr::select(y, by)
+
+  if (! isTRUE(all.equal(nrow(dplyr::setdiff(x_combos, y_combos)), 0))) {
+    stop(glue::glue("Values of {by} in `x` are not in `y`"), call. = FALSE)
+  }
+
+  assert_pk_ish(y, by = by)
+
+  invisible(x)
 }
