@@ -1,16 +1,16 @@
-Package: tblrelations
 Type: Package
+Package: tblrelations
 Title: Extra diagnostics for joins
 Version: 0.1.0.9000
-Author: Jameel Alsalam
+Authors@R: 
+    person(given = "Jameel",
+           family = "Alsalam",
+           role = c("aut", "cre"),
+           email = "jalsalam@gmail.com")
+Author: Jameel Alsalam <jalsalam@gmail.com>
 Maintainer: Jameel Alsalam <jalsalam@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Basic tools based on dplyr when you use R like relational DB tables
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.0
 Imports: 
     dplyr,
     magrittr,
@@ -22,3 +22,7 @@ Suggests:
     testthat,
     nycflights13,
     Lahman
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.0
