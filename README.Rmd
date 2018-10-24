@@ -12,9 +12,12 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
 # tblrelations
 
-The goal of tblrelations is to fill in functions for working with tibbles in a RDBMS-like way (and on the way explore relational algebra terminology).
+> Could these data frames be a database?
+
+[![Build Status](https://travis-ci.org/jalsalam/tblrelations.svg?branch=master)](https://travis-ci.org/jalsalam/tblrelations)
 
 ## Installation
 

@@ -1,23 +1,26 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-tblrelations
-============
 
-The goal of tblrelations is to fill in functions for working with tibbles in a RDBMS-like way (and on the way explore relational algebra terminology).
+# tblrelations
 
-Installation
-------------
+> Could these data frames be a database?
 
-You can install the development version of tblrelations from Github with:
+[![Build
+Status](https://travis-ci.org/jalsalam/tblrelations.svg?branch=master)](https://travis-ci.org/jalsalam/tblrelations)
+
+## Installation
+
+You can install the development version of tblrelations from Github
+with:
 
 ``` r
 devtools::install_github("jalsalam/tblrelations")
 ```
 
-Example
--------
+## Example
 
-When working with data frames in R in a relational data way, it is useful to identify primary and foreign keys:
+When working with data frames in R in a relational data way, it is
+useful to identify primary and foreign keys:
 
 ``` r
 library(tblrelations)
@@ -103,7 +106,8 @@ fk_ish(band_members, band_instruments, by = "name")
 # fk_ish(band_members, band_instruments2, by = c("name" = "artist")) # currently errors
 ```
 
-Note: it should be possible to use rename\_at like options:
+Note: it should be possible to use rename\_at like
+options:
 
 ``` r
 #rename_at(band_instruments2, vars(name = "artist")) #error b/c you must rename with a function
@@ -130,7 +134,8 @@ rename_at(band_instruments2, c("name" = "artist", "instrument" = "plays"), funs(
 #> 3 Keith guitar
 ```
 
-Have you ever been surprised that a left\_join resulted in an unexpected cross-join or NA rows?
+Have you ever been surprised that a left\_join resulted in an unexpected
+cross-join or NA rows?
 
 ``` r
 pk_ish(dfy, by = "id")
@@ -144,25 +149,34 @@ left_join_fk(dfx, dfy, by = "id")
 # if there is a foreign-key-ish relationship of dfx -> dfy using "id", then it returns the joined table as normal, otherwise it errors.
 ```
 
-Development goals
------------------
+## Development goals
 
-1.  Make sure that the same semantics of the `by` argument can be used with `left_join_fk()` as can be used with the normal dplyr join verbs. Using rename\_at like semantics, it should eb possible to accept either a character vector or a `vars` specification.
+1.  Make sure that the same semantics of the `by` argument can be used
+    with `left_join_fk()` as can be used with the normal dplyr join
+    verbs. Using rename\_at like semantics, it should eb possible to
+    accept either a character vector or a `vars` specification.
 
-2.  Add diagnostics and good error messages that let you know if there are missing or duplicate values on your dimension table. Maybe this should be under an option `verbose = TRUE` or something.
+2.  Add diagnostics and good error messages that let you know if there
+    are missing or duplicate values on your dimension table. Maybe this
+    should be under an option `verbose = TRUE` or something.
 
-3.  Add an assertion version of some o fthese checks -- e.g., a good explanatory error message for use with testthat.
+3.  Add an assertion version of some o fthese checks – e.g., a good
+    explanatory error message for use with testthat.
 
-4.  Add right\_join\_fk. Are there other join relationships that make sense for these kinds of checks?
+4.  Add right\_join\_fk. Are there other join relationships that make
+    sense for these kinds of
+checks?
 
-Much more speculative. Really need some DB research on what else might be helpful:
-----------------------------------------------------------------------------------
+## Much more speculative. Really need some DB research on what else might be helpful:
 
--   Maybe s3 object for which you can more permanently label pk?
+  - Maybe s3 object for which you can more permanently label pk?
 
--   Maybe express domains, codomains, onto, covers, or other such function/set theory types of concepts as tests on relations.
+  - Maybe express domains, codomains, onto, covers, or other such
+    function/set theory types of concepts as tests on relations.
 
--   Maybe coerce a table to a function. E.g. :
+  - Maybe coerce a table to a function. E.g. :
+
+<!-- end list -->
 
 ``` r
 join_dfy <- as_tbl_function(dfy, by = "id")
