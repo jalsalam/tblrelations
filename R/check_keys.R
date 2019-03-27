@@ -32,7 +32,7 @@ pk_ish <- function(.data, by = NULL,
 assert_pk_ish <- function(.data, by = NULL,
                           na_matches = pkgconfig::get_config("dplyr::na_matches")) {
 
-  data_name <- rlang::as_string(rlang::enexpr(.data))
+  data_name <- rlang::expr_text(rlang::enexpr(.data))
 
   if (!nrow(dplyr::distinct(dplyr::select(.data, by))) == nrow(.data)) {
     by_names <- glue::glue_collapse(by, sep = "`, `", last = "` and `")

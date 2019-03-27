@@ -32,6 +32,11 @@ test_that("pk_ish handles multiple key false cases", {
   expect_error(assert_pk_ish(flights, c("year", "month", "day", "carrier", "flight")))
 })
 
+test_that("assert_pk_ish handles complex input", {
+  air_list <- list(airports=airports)
+  expect_true(pk_ish(air_list$airports, by = "faa"))
+  expect_silent(assert_pk_ish(air_list$airports, by = "faa"))
+})
 
 test_that("fk_ish handles basic true case", {
   expect_true(         fk_ish(flights, airlines, by = "carrier"))
